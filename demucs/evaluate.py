@@ -155,20 +155,26 @@ def evaluate(solver, compute_sdr=False):
             all_tracks.update(distrib.share(tracks, src))
 
         result = {}
-        metric_names = next(iter(all_tracks.values()))[model.sources[0]]
-        for metric_name in metric_names:
-            avg = 0
-            avg_of_medians = 0
-            for source in model.sources:
-                medians = [
-                    np.nanmedian(all_tracks[track][source][metric_name])
-                    for track in all_tracks.keys()]
-                mean = np.mean(medians)
-                median = np.median(medians)
-                result[metric_name.lower() + "_" + source] = mean
-                result[metric_name.lower() + "_med" + "_" + source] = median
-                avg += mean / len(model.sources)
-                avg_of_medians += median / len(model.sources)
-            result[metric_name.lower()] = avg
-            result[metric_name.lower() + "_med"] = avg_of_medians
+        print(f"all_tracks.values()={all_tracks.values()}")
+        print(f"model.sources={model.sources}")
+        try:
+            metric_names = next(iter(all_tracks.values()))[model.sources[0]]
+            for metric_name in metric_names:
+                avg = 0
+                avg_of_medians = 0
+                for source in model.sources:
+                    medians = [
+                        np.nanmedian(all_tracks[track][source][metric_name])
+                        for track in all_tracks.keys()]
+                    mean = np.mean(medians)
+                    median = np.median(medians)
+                    result[metric_name.lower() + "_" + source] = mean
+                    result[metric_name.lower() + "_med" + "_" + source] = median
+                    avg += mean / len(model.sources)
+                    avg_of_medians += median / len(model.sources)
+                result[metric_name.lower()] = avg
+                result[metric_name.lower() + "_med"] = avg_of_medians
+        except StopIteration as e:
+            pass
+
         return result
