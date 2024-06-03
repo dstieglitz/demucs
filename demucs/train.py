@@ -236,6 +236,7 @@ def main(args):
         logger.setLevel(logging.DEBUG)
 
     logger.info("For logs, checkpoints and samples check %s", os.getcwd())
+    logger.info("strypio_xp_dataset | xp_id=%s | dataset_id=%s", os.getcwd().split('/')[-1], os.environ['DATASET_ID'])
     logger.debug(args)
     from dora import get_xp
     logger.debug(get_xp().cfg)
